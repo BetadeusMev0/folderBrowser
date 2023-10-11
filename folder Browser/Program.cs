@@ -55,18 +55,37 @@
                         break;
 
                 }
-
+                dlc = "";
 
             }
 
 
         }
 
+
+        private static bool CheckDirectory(string name) 
+        {
+            directory = new DirectoryInfo(path);
+            foreach (var vr in directory.GetDirectories()) 
+            {
+                if (vr.Name == name) return true;
+            } 
+
+
+
+            return false;
+        }
+
+
         private static void CreateFile(string name) 
         {
             string tmp = path + "\\" + name + ".txt";
-            File.Create(path);
+            File.Create(tmp);
         }
+
+
+        private static string dlc = "";
+
 
         private static void Rename(string name, string newName) 
         {
@@ -87,15 +106,11 @@
                 if (isDirectory) 
                 {
                     DirectoryInfo dir = new DirectoryInfo(path+"\\"+name);
+                    Directory.CreateDirectory(path+"\\"+newName);
+
                     dir.MoveTo(path + "\\" + newName);
 
-                    foreach (FileInfo file in dir.GetFiles()) 
-                    {
-                        file.Delete();
-                    }
-
-
-                    dir.Delete();
+                    
                 }
 
             }
@@ -105,7 +120,7 @@
         private  static void Output() 
         {
             Console.WriteLine("Текущий путь к файлу: " + path);
-            Console.WriteLine("1. Перейти в директорию\n2. Создать директорию\n3. Переименовать что то\n4. Создать пустой текстовый файл\n5. Вывести список\n6. Вернуться на шаг назад\n7. Сделать консоль читаемой\nq - Выйти");
+            Console.WriteLine("1. Перейти в директорию\n2. Создать директорию\n3. Переименовать что то\n4. Создать пустой текстовый файл\n5. Вывести список\n6. Вернуться на шаг назад\n7. Сделать консоль читаемой\nq - Выйти\n" + dlc);
 
 
 
@@ -121,7 +136,7 @@
             }
             catch 
             {
-                Console.WriteLine("Ты дурак?");
+                dlc = "Ничего не вышло";
             }
         }
 
@@ -149,12 +164,13 @@
 
         private static void MoveTo(string str) 
         {
-            if (!(str == ""))
+            if (CheckDirectory(str))
             {
                 path += "\\";
                 path += str;
                 directory = new DirectoryInfo(path);
             }
+            else dlc = "Нет";
             }
         private static void MoveBack() 
         {
